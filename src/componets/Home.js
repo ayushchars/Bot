@@ -36,7 +36,7 @@ function Home() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-80">
-        <h2 className="text-center text-2xl font-semibold mb-6">Interview Bot</h2>
+        <h2 className="text-center text-2xl font-semibold mb-6">My Bot</h2>
         <input
           type="text"
           value={payload.username}
