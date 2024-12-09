@@ -1,8 +1,9 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import IsLoadingHOC from './IsLoadingHOC';
 
-function Home() {
+function Home({setLoading}) {
   const randomLevel =["beginner","advanced","middle"]
   const randomlevel = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
   const [payload, setpayload] = useState({
@@ -22,14 +23,17 @@ function Home() {
 
   const handleClick = async () => {
     try {
+      setLoading(true)
       await axios.post(`${process.env.REACT_APP_BASEURL}/interview-bot`, payload)
         .then((res) => {
           const resData = res.data
+          setLoading(false)
           navigate('/question', { state: { questions: resData.data } })
         })
     }
     catch (err) {
       console.log(err)
+      setLoading(false)
     }
   }
 
@@ -64,4 +68,4 @@ function Home() {
   )
 }
 
-export default Home
+export default IsLoadingHOC(Home)

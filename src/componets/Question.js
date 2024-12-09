@@ -1,8 +1,9 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import IsLoadingHOC from './IsLoadingHOC';
 
-function Question() {
+function Question({setLoading}) {
   const { state } = useLocation();
   const [questions, setQuestions] = useState(state.questions?.questions || []);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -21,6 +22,7 @@ const level = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
     if (isFetching) return;
     setIsFetching(true);
     try {
+      setLoading(true)
       const res = await axios.post(`${process.env.REACT_APP_BASEURL}/interview-bot`, {
       
         username: state?.questions?.username,
@@ -28,13 +30,16 @@ const level = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
         level: level,
       });
       if (res?.data.status === 1) {
+        setLoading(false)
         setQuestions((prevQuestions) => [...prevQuestions, ...res?.data?.data?.questions]);
       } else {
+        setLoading(false)
         console.error("No new questions returned");
       }
     } catch (err) {
       console.error("Error fetching questions", err);
     } finally {
+      setLoading(false)
       setIsFetching(false);
     }
   };
@@ -122,4 +127,4 @@ const level = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
   );
 }
 
-export default Question;
+export default IsLoadingHOC(Question);
