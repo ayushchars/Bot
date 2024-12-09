@@ -8,7 +8,7 @@ function Home() {
   const [payload, setpayload] = useState({
     username: "",
     languages: "",
-    level: randomlevel,
+    level: "advanced",
   })
   const navigate = useNavigate()
 
