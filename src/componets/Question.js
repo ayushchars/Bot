@@ -34,11 +34,9 @@ function Question({ setLoading }) {
         setQuestions((prevQuestions) => [...prevQuestions, ...res?.data?.data?.questions]);
         setLoading(false);
       } else {
-        console.error("No new questions returned. Retrying...");
         await fetchMoreQuestions();
       }
     } catch (err) {
-      console.error("Error fetching questions. Retrying...", err);
       await fetchMoreQuestions();
     } finally {
       setLoading(false);
@@ -89,7 +87,6 @@ function Question({ setLoading }) {
 };
 
   const correct = results.filter((item) => item.correct).length;
-  console.log(correct, "correct")
   const life = results?.filter((item) => item?.correct === false);
 
   return (

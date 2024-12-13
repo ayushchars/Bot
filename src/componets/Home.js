@@ -39,11 +39,9 @@ function Home({setLoading}) {
         navigate('/question', { state: { questions: resData.data } });
         sessionStorage.setItem("languages", resData?.data?.languages);
       } else {
-        console.error("No new questions returned. Retrying...");
         await handleClick();
       }
     } catch (err) {
-      console.error("Error fetching questions. Retrying...", err);
       if(err?.response?.data?.message != "enter valid lang"){
         await handleClick();
       }else if (err?.response?.data?.message === "enter valid lang"){
