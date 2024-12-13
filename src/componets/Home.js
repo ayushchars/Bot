@@ -13,6 +13,7 @@ function Home({setLoading}) {
     level: "advanced",
   })
   const navigate = useNavigate()
+  const [isFetching, setIsFetching] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target
@@ -22,34 +23,41 @@ function Home({setLoading}) {
     }))
   }
   const dispatch = useDispatch()
-
   const handleClick = async () => {
+    if (isFetching) return;
+    setIsFetching(true);
     try {
-      setLoading(true)
-      await axios.post(`${process.env.REACT_APP_BASEURL}/interview-bot`, payload)
-        .then((res) => {
-          const resData = res.data
-          setLoading(false)
-          console.log(resData,"sdsdf")
-       if (resData.status === 1) {
-        dispatch(seveUser({name : resData?.data?.username, languages : resData?.data?.languages}))
-          navigate('/question', { state: { questions: resData.data } })
-          sessionStorage.setItem("languages" ,resData?.data?.languages)
-          } else {
-            setLoading(false)
-            console.error("No new questions returned");
-          }          
-        })
-    }
-    catch (err) {
-      toast.error(err?.response?.data?.message)
-      setLoading(false)
-    }
-  }
+      setLoading(true);
+      const res = await axios.post(`${process.env.REACT_APP_BASEURL}/interview-bot`, payload);
+      const resData = res.data; 
+  
+      if (resData.status === 1) {
+        dispatch(seveUser({
+          name: resData?.data?.username,
+          languages: resData?.data?.languages
+        }));
+        navigate('/question', { state: { questions: resData.data } });
+        sessionStorage.setItem("languages", resData?.data?.languages);
+      } else {
+        console.error("No new questions returned. Retrying...");
+        await handleClick();
+      }
+    } catch (err) {
+      console.error("Error fetching questions. Retrying...", err);
+      if(err?.response?.data?.message != "enter valid lang"){
+        await handleClick();
+      }else if (err?.response?.data?.message === "enter valid lang"){
 
+        toast.error("Please enter valid progaming language")
+      }
+    } finally {
+      setLoading(false);
+      setIsFetching(false);
+    }
+  };
+  
 
   const state = useSelector(state => state.auth.user )
-  console.log(state,"Sdfsdf") 
   
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">

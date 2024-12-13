@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 function Result() {
   const { state } = useLocation();
@@ -7,13 +7,15 @@ function Result() {
   const totalAttempted = results.length;
   const totalCorrect = results.filter((item) => item.correct).length;
 
-
-  console.log(totalAttempted,"totalAttemptedtotalAttempted")
-  console.log(totalCorrect,"totalAttemptedtotalAttempted")
-  
-
+  const navigate = useNavigate()
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
+      <img src='/back.png' className="absolute top-4 left-4 h-[20px]" onClick={()=>navigate("/")}/>
+      <button
+       
+        className="absolute top-4 right-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow-md hover:bg-blue-600"
+      onClick={()=>navigate("/analytics")}
+      >Analytics</button>
       <div className="bg-white shadow-md rounded-lg w-full max-w-4xl p-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-blue-500 mb-2">Quiz Results</h1>
