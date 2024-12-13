@@ -2,8 +2,10 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import IsLoadingHOC from './IsLoadingHOC';
+import { useDispatch, useSelector } from 'react-redux';
+import { savelanguage } from '../Redux/Reducers/authSlice';
 
-function Question({setLoading}) {
+function Question({ setLoading }) {
   const { state } = useLocation();
   const [questions, setQuestions] = useState(state.questions?.questions || []);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -11,13 +13,14 @@ function Question({setLoading}) {
   const [results, setResults] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch()
   const currentQuestion = questions[currentQuestionIndex];
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
 
   const fetchMoreQuestions = async () => {
-    if (isFetching) return; 
+    if (isFetching) return;
     setIsFetching(true);
     try {
       setLoading(true);
@@ -26,7 +29,7 @@ function Question({setLoading}) {
         languages: state?.questions?.languages,
         level: "advanced",
       });
-  
+
       if (res?.data.status === 1) {
         setQuestions((prevQuestions) => [...prevQuestions, ...res?.data?.data?.questions]);
         setLoading(false);
@@ -36,13 +39,13 @@ function Question({setLoading}) {
       }
     } catch (err) {
       console.error("Error fetching questions. Retrying...", err);
-      await fetchMoreQuestions(); 
+      await fetchMoreQuestions();
     } finally {
       setLoading(false);
       setIsFetching(false);
     }
   };
-  
+
   const handleNext = async () => {
     if (selectedOption !== null) {
       setResults((prevResults) => [
@@ -71,17 +74,28 @@ function Question({setLoading}) {
       alert("Please select an option before proceeding.");
     }
   };
+  const name = useSelector(state => state.auth.name)
 
   const showResult = () => {
-    navigate('/result', { state: { result: results } });
-  };
+    const language = sessionStorage.getItem("languages");
+    dispatch(
+        savelanguage({
+            language,
+            attempt: results.length,
+            correct,
+        })
+    );
+    navigate("/result", { state: { result: results } });
+};
 
+  const correct = results.filter((item) => item.correct).length;
+  console.log(correct, "correct")
   const life = results?.filter((item) => item?.correct === false);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
-      <h1 className="text-2xl font-bold mb-4">Hello, {state?.questions?.username}!</h1>
+        <h1 className="text-2xl font-bold mb-4">Hello, {state?.questions?.username}!</h1>
 
         {life?.length === 5 && (
           <div className="text-center">

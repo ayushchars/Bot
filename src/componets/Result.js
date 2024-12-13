@@ -7,6 +7,11 @@ function Result() {
   const totalAttempted = results.length;
   const totalCorrect = results.filter((item) => item.correct).length;
 
+
+  console.log(totalAttempted,"totalAttemptedtotalAttempted")
+  console.log(totalCorrect,"totalAttemptedtotalAttempted")
+  
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <div className="bg-white shadow-md rounded-lg w-full max-w-4xl p-8">

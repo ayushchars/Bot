@@ -2,6 +2,9 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import IsLoadingHOC from './IsLoadingHOC';
+import { useDispatch, useSelector } from 'react-redux';
+import { seveUser } from '../Redux/Reducers/authSlice';
+import { toast } from 'react-toastify';
 
 function Home({setLoading}) {
   const [payload, setpayload] = useState({
@@ -18,6 +21,7 @@ function Home({setLoading}) {
       [name]: value
     }))
   }
+  const dispatch = useDispatch()
 
   const handleClick = async () => {
     try {
@@ -26,10 +30,11 @@ function Home({setLoading}) {
         .then((res) => {
           const resData = res.data
           setLoading(false)
+          console.log(resData,"sdsdf")
        if (resData.status === 1) {
+        dispatch(seveUser({name : resData?.data?.username, languages : resData?.data?.languages}))
           navigate('/question', { state: { questions: resData.data } })
-          localStorage.setItem("username" ,resData?.data?.username)
-          localStorage.setItem("languages" ,resData?.data?.languages)
+          sessionStorage.setItem("languages" ,resData?.data?.languages)
           } else {
             setLoading(false)
             console.error("No new questions returned");
@@ -37,11 +42,15 @@ function Home({setLoading}) {
         })
     }
     catch (err) {
-      alert(err?.response?.data?.message)
+      toast.error(err?.response?.data?.message)
       setLoading(false)
     }
   }
 
+
+  const state = useSelector(state => state.auth.user )
+  console.log(state,"Sdfsdf") 
+  
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-lg w-80">
