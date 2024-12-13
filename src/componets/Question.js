@@ -26,7 +26,7 @@ function Question({ setLoading }) {
       setLoading(true);
       const res = await axios.post(`${process.env.REACT_APP_BASEURL}/interview-bot`, {
         username: state?.questions?.username,
-        languages: state?.questions?.languages,
+        languages: state?.questions?.languages[0],
         level: "advanced",
       });
 
