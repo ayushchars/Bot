@@ -11,39 +11,38 @@ function Question({setLoading}) {
   const [results, setResults] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
   const navigate = useNavigate();
-const randomLevel =["beginner","advanced","middle"]
-const level = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
   const currentQuestion = questions[currentQuestionIndex];
   const handleOptionChange = (option) => {
     setSelectedOption(option);
   };
 
   const fetchMoreQuestions = async () => {
-    if (isFetching) return;
+    if (isFetching) return; 
     setIsFetching(true);
     try {
-      setLoading(true)
+      setLoading(true);
       const res = await axios.post(`${process.env.REACT_APP_BASEURL}/interview-bot`, {
-      
         username: state?.questions?.username,
         languages: state?.questions?.languages,
-        level: level,
+        level: "advanced",
       });
+  
       if (res?.data.status === 1) {
-        setLoading(false)
         setQuestions((prevQuestions) => [...prevQuestions, ...res?.data?.data?.questions]);
+        setLoading(false);
       } else {
-        setLoading(false)
-        console.error("No new questions returned");
+        console.error("No new questions returned. Retrying...");
+        await fetchMoreQuestions();
       }
     } catch (err) {
-      console.error("Error fetching questions", err);
+      console.error("Error fetching questions. Retrying...", err);
+      await fetchMoreQuestions(); 
     } finally {
-      setLoading(false)
+      setLoading(false);
       setIsFetching(false);
     }
   };
-
+  
   const handleNext = async () => {
     if (selectedOption !== null) {
       setResults((prevResults) => [
@@ -59,7 +58,7 @@ const level = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
 
       setSelectedOption(null);
 
-      if (questions.length - currentQuestionIndex <= 2) {
+      if (questions.length - currentQuestionIndex <= 8) {
         await fetchMoreQuestions();
       }
 
@@ -67,7 +66,6 @@ const level = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
         setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
       } else {
         alert("Quiz completed! Check your results.");
-        console.log(results);
       }
     } else {
       alert("Please select an option before proceeding.");

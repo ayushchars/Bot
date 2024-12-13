@@ -4,8 +4,6 @@ import { useNavigate } from 'react-router-dom'
 import IsLoadingHOC from './IsLoadingHOC';
 
 function Home({setLoading}) {
-  const randomLevel =["beginner","advanced","middle"]
-  const randomlevel = randomLevel[Math.floor(Math?.random() * randomLevel?.length)];
   const [payload, setpayload] = useState({
     username: "",
     languages: "",
@@ -28,11 +26,18 @@ function Home({setLoading}) {
         .then((res) => {
           const resData = res.data
           setLoading(false)
+       if (resData.status === 1) {
           navigate('/question', { state: { questions: resData.data } })
+          localStorage.setItem("username" ,resData?.data?.username)
+          localStorage.setItem("languages" ,resData?.data?.languages)
+          } else {
+            setLoading(false)
+            console.error("No new questions returned");
+          }          
         })
     }
     catch (err) {
-      console.log(err)
+      alert(err?.response?.data?.message)
       setLoading(false)
     }
   }
