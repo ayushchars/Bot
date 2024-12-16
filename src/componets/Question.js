@@ -59,7 +59,7 @@ function Question({ setLoading }) {
 
       setSelectedOption(null);
 
-      if (questions.length - currentQuestionIndex <= 1) {
+      if (questions.length - currentQuestionIndex <= 3) {
         await fetchMoreQuestions();
       }
 
