@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import IsLoadingHOC from './IsLoadingHOC';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +54,27 @@ function Home({setLoading}) {
     }
   };
   
+
+
+  useEffect(()=>{
+    const startServer = async()=>{
+      setLoading(true)
+      try{
+
+       const response = await axios.get(`${process.env.REACT_APP_BASEURL}/run-server`)
+
+       const resData = response.data
+        if(resData.status === 1){
+          setLoading(false)
+        }
+    }catch(Err){
+      console.log(Err)
+      setLoading(false)
+    }
+    }
+    startServer()
+
+  },[])
 
   const state = useSelector(state => state.auth.user )
   

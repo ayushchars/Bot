@@ -1,9 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 function Result() {
   const { state } = useLocation();
-  const results = state?.result || [];
+  const Result = useSelector(state=>state?.auth?.lastResult)
+  const results = state?.result || Result || [];
   const totalAttempted = results.length;
   const totalCorrect = results.filter((item) => item.correct).length;
 

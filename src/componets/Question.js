@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import IsLoadingHOC from './IsLoadingHOC';
 import { useDispatch, useSelector } from 'react-redux';
-import { savelanguage } from '../Redux/Reducers/authSlice';
+import { savelanguage, saveResult } from '../Redux/Reducers/authSlice';
 
 function Question({ setLoading }) {
   const { state } = useLocation();
-  const [questions, setQuestions] = useState(state.questions?.questions || []);
+  const [questions, setQuestions] = useState(state?.questions?.questions || []);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [results, setResults] = useState([]);
@@ -83,6 +83,7 @@ function Question({ setLoading }) {
             correct,
         })
     );
+    dispatch(saveResult(results))
     navigate("/result", { state: { result: results } });
 };
 
@@ -91,6 +92,16 @@ function Question({ setLoading }) {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+   <div className="absolute top-4 right-4 flex gap-2">
+      {Array.from({ length: life?.length }).map((_, index) => (
+        <img
+          key={index}
+          src="/no.png"
+          alt={`Life image ${index + 1}`}
+          className="w-10 h-10 object-cover"
+        />
+      ))}
+    </div>
       <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md">
         <h1 className="text-2xl font-bold mb-4">Hello, {state?.questions?.username}!</h1>
 

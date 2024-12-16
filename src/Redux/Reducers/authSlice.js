@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
     user: {},
     language: {}, 
-    languageByDate: {} 
+    languageByDate: {},
+    lastResult : {}
 };
 
 export const authSlice = createSlice({
@@ -15,6 +16,9 @@ export const authSlice = createSlice({
         },
         seveUser: (state, action) => {
             state.user = action.payload;
+        },
+        saveResult: (state, action) => {
+            state.lastResult = action.payload;
         },
         savelanguage: (state, action) => {
             const { language, attempt, correct } = action.payload;
@@ -46,6 +50,6 @@ export const authSlice = createSlice({
     },
 });
 
-export const { setAccessToken, seveUser, logout, savelanguage } = authSlice.actions;
+export const { setAccessToken, seveUser, logout, savelanguage,saveResult } = authSlice.actions;
 
 export default authSlice.reducer;
