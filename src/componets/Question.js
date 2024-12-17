@@ -37,6 +37,11 @@ function Question({ setLoading }) {
         await fetchMoreQuestions();
       }
     } catch (err) {
+      if (err?.response?.data?.message === "An error rate_limit_exceeded")
+        {
+        toast.error("Due to high traffic, please try again later. ")
+      return showResult()
+      }
       await fetchMoreQuestions();
     } finally {
       setLoading(false);

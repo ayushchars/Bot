@@ -42,10 +42,18 @@ function Home({setLoading}) {
         await handleClick();
       }
     } catch (err) {
-      if(err?.response?.data?.message != "enter valid lang"){
-        await handleClick();
-      }else if (err?.response?.data?.message === "enter valid lang"){
+      
+      if (err?.response?.data?.message === "An error rate_limit_exceeded")
+        {
+        toast.error("Due to high traffic, please try again later. ")
+      return
+      }
 
+       else if(err?.response?.data?.message != "enter valid lang"){
+        await handleClick();
+
+      }
+      else  if (err?.response?.data?.message === "enter valid lang"){
         toast.error("Please enter valid progaming language")
       }
     } finally {
