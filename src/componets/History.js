@@ -27,6 +27,8 @@ function Result({ setLoading }) {
       if (resData?.status === 1) {
         setResponse(resData?.data?.ans);
         setOpenModal(true);
+        
+
       }
     } catch (err) {
       console.log(err);
@@ -39,6 +41,11 @@ function Result({ setLoading }) {
     if (question) handleAsk();
   }, [question]);
 
+
+  const handleClose=()=>{
+    setOpenModal(false)
+    setQuestion("")
+  }
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
       <div className="bg-white shadow-md rounded-lg w-full max-w-4xl p-8">
@@ -77,7 +84,7 @@ function Result({ setLoading }) {
                     {item.correct ? 'Correct' : 'Wrong'}
                   </h4>
                   <button
-                    className="ml-2 text-blue-500 underline hover:text-blue-700 cursor-pointer"
+                    className="ml-2 text-blue-500  hover:text-green-600 cursor-pointer"
                     onClick={() => setQuestion(item?.question)}
                   >
                     Ask me
@@ -90,11 +97,11 @@ function Result({ setLoading }) {
       </div>
 
       {openModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={() => setOpenModal(false)}>
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={handleClose}>
     <div className="bg-white rounded-lg shadow-lg w-[80vw] h-[80vh] p-6 relative flex flex-col">
       <button
         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
-        onClick={() => setOpenModal(false)}
+        onClick={handleClose}
       >
         &times;
       </button>
