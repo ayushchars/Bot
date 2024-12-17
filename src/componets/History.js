@@ -18,6 +18,7 @@ function Result({ setLoading }) {
   const navigate = useNavigate();
 
   const handleAsk = async () => {
+    if(!question) return
     setLoading(true);
     try {
       const response = await axios.post(`${process.env.REACT_APP_BASEURL}/ask-question`, { question });
@@ -97,14 +98,14 @@ function Result({ setLoading }) {
       </div>
 
       {openModal && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" onClick={handleClose}>
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50" >
     <div className="bg-white rounded-lg shadow-lg w-[80vw] h-[80vh] p-6 relative flex flex-col">
-      <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 text-2xl"
+      <img
+        className="absolute top-2 h-5 w-5 right-2 text-gray-500 hover:text-gray-700 text-2xl"
+        src='/cross.png'
         onClick={handleClose}
-      >
-        &times;
-      </button>
+      />
+  
       <h4 className="text-xl font-bold mb-4 text-blue-500">{question}</h4>
       
       <div className="flex-1 overflow-y-auto">
