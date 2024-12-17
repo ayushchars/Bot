@@ -6,10 +6,10 @@ import IsLoadingHOC from './IsLoadingHOC';
 
 function Result({ setLoading }) {
   const { state } = useLocation();
-  const Result = useSelector((state) => state?.auth?.lastResult);
+  const Result = useSelector((state) => state?.auth?.history.flat());
   const results = state?.result || Result || [];
-  const totalAttempted = results.length;
-  const totalCorrect = results.filter((item) => item.correct).length;
+  const totalAttempted = Result?.length;
+  const totalCorrect = Result?.filter((item) => item?.correct)?.length;
 
   const [question, setQuestion] = useState('');
   const [response, setResponse] = useState('');
@@ -41,19 +41,6 @@ function Result({ setLoading }) {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">
-      <img
-        src="/back.png"
-        className="absolute top-4 left-4 h-[20px] cursor-pointer"
-        onClick={() => navigate('/')}
-        alt="Back"
-      />
-      <button
-        className="absolute top-4 right-4 bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow-md hover:bg-blue-600"
-        onClick={() => navigate('/analytics')}
-      >
-        Analytics
-      </button>
-
       <div className="bg-white shadow-md rounded-lg w-full max-w-4xl p-8">
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-blue-500 mb-2">Quiz Results</h1>

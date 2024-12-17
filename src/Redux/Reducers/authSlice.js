@@ -4,7 +4,8 @@ const initialState = {
     user: {},
     language: {}, 
     languageByDate: {},
-    lastResult : {}
+    lastResult : {},
+    history : []
 };
 
 export const authSlice = createSlice({
@@ -19,6 +20,9 @@ export const authSlice = createSlice({
         },
         saveResult: (state, action) => {
             state.lastResult = action.payload;
+        },
+        savehistory: (state, action) => {
+            state.history = action.payload;
         },
         savelanguage: (state, action) => {
             const { language, attempt, correct } = action.payload;
@@ -50,6 +54,6 @@ export const authSlice = createSlice({
     },
 });
 
-export const { setAccessToken, seveUser, logout, savelanguage,saveResult } = authSlice.actions;
+export const { setAccessToken, seveUser, logout, savelanguage,saveResult ,savehistory } = authSlice.actions;
 
 export default authSlice.reducer;

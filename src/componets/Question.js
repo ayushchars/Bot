@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import IsLoadingHOC from './IsLoadingHOC';
 import { useDispatch, useSelector } from 'react-redux';
-import { savelanguage, saveResult } from '../Redux/Reducers/authSlice';
+import { savehistory, savelanguage, saveResult } from '../Redux/Reducers/authSlice';
 
 function Question({ setLoading }) {
   const { state } = useLocation();
@@ -43,6 +43,7 @@ function Question({ setLoading }) {
       setIsFetching(false);
     }
   };
+  const history = useSelector(state=>state?.auth?.history)
 
   const handleNext = async () => {
     if (selectedOption !== null) {
@@ -84,8 +85,10 @@ function Question({ setLoading }) {
         })
     );
     dispatch(saveResult(results))
+    dispatch(savehistory([...history, results]));
     navigate("/result", { state: { result: results } });
 };
+
 
   const correct = results.filter((item) => item.correct).length;
   const life = results?.filter((item) => item?.correct === false);
