@@ -6,6 +6,7 @@ import Analytics from './componets/Analytics'
 import Result from './componets/Result'
 import History from './componets/History'
 import Read from './componets/Read'
+import QuestionAnswerPage from './componets/QuestionAnswerPage'
 function App() {
   return (
   <>
@@ -16,6 +17,7 @@ function App() {
     <Route path='/result' element={<Result/>}/>
     <Route path='/history' element={<History/>}/>
     <Route path='/read' element={<Read/>}/>
+    <Route path='/ask' element={<QuestionAnswerPage/>}/>
   </Routes>
   </>
   )

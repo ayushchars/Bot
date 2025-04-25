@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import IsLoadingHOC from './IsLoadingHOC';
 import { useDispatch, useSelector } from 'react-redux';
 import { savehistory, savelanguage, saveResult } from '../Redux/Reducers/authSlice';
+import { toast } from 'react-toastify';
 
 function Question({ setLoading }) {
   const { state } = useLocation();
@@ -39,7 +40,7 @@ function Question({ setLoading }) {
     } catch (err) {
       if (err?.response?.data?.message === "An error rate_limit_exceeded")
         {
-        toast.error("Due to high traffic, please try again later. ")
+          toast.error("Due to high traffic, please try again later. ")
       return showResult()
       }
       await fetchMoreQuestions();
